@@ -54,6 +54,19 @@ let baseWebpackConfig = {
   },
   module: {
     rules: [
+    //   {
+    //     test: /\.js$/,
+    //     include: [resolve('src'), resolve('test'), resolve('static/vant')], // 添加vant文件目录
+    //     use: [
+    //     'babel-loader',
+    //     {
+    //         loader: 'mpvue-loader',
+    //         options: {
+    //         checkMPEntry: true
+    //         }
+    //     },
+    //     ]
+    // },
       {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
