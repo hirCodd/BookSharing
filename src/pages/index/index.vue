@@ -1,8 +1,36 @@
 <template>
   <div class="container">
-    <p>hello</p>
-    <van-button>测试</van-button>
-    <van-search  placeholder="请输入搜索关键词" />
+    <!-- 用于显示搜索 -->
+    <div class="top-search">
+      <van-search
+        placeholder="请输入搜索关键词"
+        use-action-slot
+        bind:search="onSearch"
+      >
+        <view slot="action" bind:tap="onSearch">搜索</view>
+      </van-search>
+    </div>
+    <!-- 列表 -->
+    <div class="list-content">
+      <i-card title="名称" extra="5元/本" thumb="https://i.loli.net/2017/08/21/599a521472424.jpg">
+        <view slot="content">内容不错</view>
+        <view slot="footer">尾部内容</view>
+      </i-card>
+
+      <van-card
+        num="2"
+        tag="标签"
+        price="10.00"
+        desc="描述信息"
+        title="标题"
+        thumb="https://i.loli.net/2017/08/21/599a521472424.jpg"
+      >
+        <view slot="footer">
+          <view>xx人喜欢</view>
+        </view>
+      </van-card>
+    </div>
+    <!-- 底部导航栏 -->
     <Navbar></Navbar>
   </div>
 </template>
@@ -17,39 +45,15 @@ export default {
 </script>
 
 <style scoped>
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.top-search {
+  width: 80%;
+}
+.list-content {
+  width: 90%;
+  margin-top:10px;
 }
 
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-
-.counter {
-  display: inline-block;
-  margin: 10px auto;
-  padding: 5px 10px;
-  color: blue;
-  border: 1px solid blue;
+.card-list {
+  margin-top: 5px;
 }
 </style>

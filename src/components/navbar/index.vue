@@ -24,7 +24,6 @@ export default {
     onChange (event) {
       console.log('ss')
     }
-
   }
 }
 </script>
