@@ -1,13 +1,46 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/logs/main",
-    "pages/counter/main"
+    "pages/mine/main",
+    "pages/publish/main",
+    "pages/logs/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "校园二手书",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "selectedColor": "#07C160",
+    "color": "#000",
+    "list": [
+      {
+        "pagePath": "pages/index/main",
+        "text": "主页",
+        "iconPath": "/static/icon/home.png",
+        "selectedIconPath": "/static/icon/home_se.png"
+      },
+      {
+        "pagePath": "pages/logs/main",
+        "text": "微聊",
+        "iconPath": "/static/icon/chat.png",
+        "selectedIconPath": "/static/icon/chat_se.png"
+      },
+      {
+        "pagePath": "pages/publish/main",
+        "text": "发布",
+        "iconPath": "/static/icon/add.png",
+        "selectedIconPath": "/static/icon/add_se.png"
+      },
+      {
+        "pagePath": "pages/mine/main",
+        "text": "我",
+        "iconPath": "/static/icon/mine.png",
+        "selectedIconPath": "/static/icon/mine_se.png"
+      }
+    ]
   }
 }
