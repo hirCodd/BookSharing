@@ -1,3 +1,7 @@
+
+[![mpvue](https://img.shields.io/badge/mpvue-1.0.11-blue.svg)](http://mpvue.com/)
+[![vant-weapp](https://img.shields.io/badge/vant--weapp-0.5.2-blue.svg)](https://youzan.github.io/vant-weapp/#/intro)
+[![vuex](https://img.shields.io/badge/vuex-3.0.1-blue.svg)](https://vuex.vuejs.org/zh/)
 ## weapp-frontend
 
 > mpvue+vant-weapp
