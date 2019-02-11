@@ -16,7 +16,6 @@
         <view slot="header">
           <van-card
           num="2"
-          tag="标签"
           price="10.00"
           desc="描述信息"
           title="标题"
@@ -41,7 +40,6 @@
         <view slot="header">
           <van-card
           num="2"
-          tag="标签"
           price="10.00"
           desc="描述信息"
           title="标题"
@@ -66,7 +64,6 @@
         <view slot="header">
           <van-card
           num="2"
-          tag="标签"
           price="10.00"
           desc="描述信息"
           title="标题"
@@ -91,12 +88,7 @@
 </template>
 
 <script>
-import Navbar from '@/components/navbar/index'
-export default {
-  components: {
-    Navbar
-  }
-}
+
 </script>
 
 <style scoped>

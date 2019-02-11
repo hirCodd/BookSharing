@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "Home",
+  "navigationBarTitleText": "首页",
   "usingComponents": {
     "van-button": "../../static/vant/button/index",
     "van-search": "../../static/vant/search/index",

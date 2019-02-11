@@ -3,7 +3,9 @@
     "pages/index/main",
     "pages/mine/main",
     "pages/publish/main",
-    "pages/logs/main"
+    "pages/mini-chat/main",
+    "pages/single-type/main",
+    "pages/many-type/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -24,7 +26,7 @@
         "selectedIconPath": "/static/icon/home_se.png"
       },
       {
-        "pagePath": "pages/logs/main",
+        "pagePath": "pages/mini-chat/main",
         "text": "微聊",
         "iconPath": "/static/icon/chat.png",
         "selectedIconPath": "/static/icon/chat_se.png"
