@@ -3,9 +3,8 @@
     <div class="publish-type">
       <div class="single-book">
         <van-button 
-          round 
+          round
           plain
-          type="default"
           send-message-path
           @click="onClickSingle"
           >发布单本书
@@ -29,12 +28,16 @@ export default {
     return {
     }
   },
-  method: {
+  methods: {
     onClickSingle () {
-      console.log('sss')
+      wx.navigateTo({
+        url: '/pages/single-type/main'
+      })
     },
     onClickMany () {
-      console.log('sssss')
+      wx.navigateTo({
+        url: '/pages/many-type/main'
+      })
     }
   }
 }
