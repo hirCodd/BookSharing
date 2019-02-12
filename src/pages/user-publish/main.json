@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "首页",
+  "usingComponents": {
+    "van-card": "../../static/vant/card/index",
+    "van-panel": "../../static/vant/panel/index",
+    "van-row": "../../static/vant/row/index",
+    "van-col": "../../static/vant/col/index",
+    "van-icon": "../../static/vant/icon/index"
+  }
+}

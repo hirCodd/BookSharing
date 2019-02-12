@@ -5,7 +5,13 @@
     "pages/publish/main",
     "pages/mini-chat/main",
     "pages/single-type/main",
-    "pages/many-type/main"
+    "pages/many-type/main",
+    "pages/user-publish/main",
+    "pages/user-get/main",
+    "pages/user-selling/main",
+    "pages/user-wish-booklist/main",
+    "pages/user-settings/main",
+    "pages/user-faq/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
