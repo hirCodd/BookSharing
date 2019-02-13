@@ -1,15 +1,5 @@
 <template>
   <div class="container">
-    <!-- 用于显示搜索 -->
-    <div class="top-search">
-      <van-search
-        placeholder="请输入搜索关键词"
-        use-action-slot
-        bind:search="onSearch"
-      >
-        <view slot="action" bind:tap="onSearch">搜索</view>
-      </van-search>
-    </div>
     <!-- 列表 -->
     <div class="list-content">
       <van-panel use-footer-slot>

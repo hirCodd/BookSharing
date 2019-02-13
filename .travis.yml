@@ -6,5 +6,5 @@ branches:
  - master
 script:
   - npm install
-  - npm install sync_exec
+  - npm install sync-exec
   - npm run build
