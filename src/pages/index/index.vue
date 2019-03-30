@@ -83,13 +83,14 @@
         </van-row>
         </view>
       </van-panel>
+      <!-- <div class="show" v-for="item in list">
+        {{item}}
+      </div> -->
     </div>
   </div>
 </template>
 
-<script>
 
-</script>
 
 <style scoped>
 .top-search {
@@ -104,3 +105,30 @@
   margin-top: 5px;
 }
 </style>
+<script>
+export default {
+  data () {
+    return {
+      list: []
+    }
+  },
+  created () {
+    // this.getUserInfo()
+    this.getData()
+    // this.getSetting()
+  },
+  methods: {
+    // 测试连接
+    getData () {
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/users',
+        body: {}
+      }).then(res => {
+        console.log(res)
+        this.list = res.user
+      })
+    }
+  }
+}
+</script>

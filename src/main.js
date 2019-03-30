@@ -9,4 +9,4 @@ App.mpType = 'app'
 const app = new Vue(App)
 app.$mount()
 
-Vue.prototype.$fly = fly
+Vue.prototype.$fly = fly;
