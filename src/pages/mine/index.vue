@@ -127,7 +127,7 @@ export default {
       let that = this
       wx.showModal({
         title: '提示',
-        content: '这是一个模态弹窗',
+        content: '是否退出登陆？',
         success (res) {
           if (res.confirm) {
             that.changeLoginStatus(false)

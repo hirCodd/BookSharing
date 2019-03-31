@@ -7,7 +7,11 @@
       custom-class="inner-wx-login" 
       type="default">微信用户默认登陆
     </van-button>
-    <van-button class="phone-login" custom-class="inner-phone-login" type="default">手机用户登陆</van-button>
+    <van-button 
+      class="phone-login" 
+      custom-class="inner-phone-login" 
+      type="default">手机用户登陆
+    </van-button>
   </div>
 </template>
 
@@ -67,9 +71,8 @@ export default {
           })
           // 将登陆状态改为true
           that.changeLoginStatus(true)
-          console.log(userInfo)
           that.changeStatus(userInfo)
-          console.log('后台交互拿回数据:', res)
+          console.log('res:', res)
           // 返回上一页
           wx.navigateBack({
             delta: 1
