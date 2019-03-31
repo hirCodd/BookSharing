@@ -2,8 +2,7 @@
   <div class="login">
     <van-button 
       open-type="getUserInfo"
-      @getuserinfo="bindGetUserInfo" 
-      @click="getWxUserInfo" 
+      @getuserinfo="bindGetUserInfo"
       class="wxlogin" 
       custom-class="inner-wx-login" 
       type="default">微信用户默认登陆
@@ -13,53 +12,70 @@
 </template>
 
 <script>
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 export default {
   data () {
     return {
-      userList: [],
-      isLogin: wx.canIUse('button.open-type.getUserInfo') // 判断是否登录，默认未登陆
+      code: '',
+      userList: []
+      // isLogin: wx.canIUse('button.open-type.getUserInfo') // 判断是否登录，默认未登陆
     }
   },
   onLaunch () {
+  },
+  computed: {
+    ...mapGetters(['userInfo', 'isLogin'])
+  },
+  mounted () {
     this.getUserLogin()
   },
   methods: {
+    // 改变用户登陆状态
+    ...mapMutations(['changeStatus', 'changeLoginStatus']),
     getUserLogin () {
+      const that = this
       // 获取用户的信息的方式登录微信
       wx.login({
         success (res) {
           if (res.code) {
             // 获取用户登陆信息
             console.log('微信用户登陆成功')
+            // 将获取到code传给后端
+            that.code = res.code
           } else {
             console.log('登录失败！' + res.errMsg)
           }
+        },
+        fail () {
+          // 失败处理
         }
       })
     },
-    getWxUserInfo () {
-      if (wx.canIUse('button.open-type.getUserInfo')) {
-        console.log(this.isLogin)
-      } else {
-        console.log('请升级微信版本')
-      }
-    },
     bindGetUserInfo (e) {
+      const that = this
       if (e.mp.detail.rawData) {
-        // 用户按了允许授权按钮
-        console.log('用户允许授权')
-        this.userList = JSON.parse(e.mp.detail.rawData)
-        // 向服务端发送用户信息
-        this.$fly.post('/user/register', {
-          data: this.userList
+        let { encryptedData, userInfo, iv } = e.mp.detail
+        that.$fly.post('/get/params', {
+          code: that.code,
+          encryptedData,
+          iv
         }).then(res => {
+          userInfo.openId = res.openid
+          that.userList = userInfo
+          that.$fly.post('/user/register', {
+            data: userInfo
+          })
+          // 将登陆状态改为true
+          that.changeLoginStatus(true)
+          console.log(userInfo)
+          that.changeStatus(userInfo)
+          console.log('后台交互拿回数据:', res)
           // 返回上一页
           wx.navigateBack({
             delta: 1
           })
         })
       } else {
-        // 用户按了拒绝按钮
         wx.showToast({
           title: '获取权限失败',
           icon: 'error',
@@ -67,6 +83,50 @@ export default {
         })
       }
     }
+    /**
+     * @description:
+     * @param {type}
+     * @return:
+     */
+    // wxGetUserInfo (code) {
+    //   const that = this
+    //   if (wx.canIUse('button.open-type.getUserInfo')) {
+    //     wx.getUserInfo({
+    //       withCredentials: true,
+    //       success (res) {
+    //         let { encryptedData, userInfo, iv } = res
+    //         that.$fly.post('/user/register', {
+    //           code,
+    //           encryptedData,
+    //           iv
+    //         }).then(res => {
+    //           console.log('后台交互拿回数据:', res)
+    //           // 返回上一页
+    //           wx.navigateBack({
+    //             delta: 1
+    //           }).catch(err => {
+    //             console.log('自动请求api失败err:', err)
+    //           })
+    //         })
+    //       },
+    //       fail (err) {
+    //         // 获取用户信息失败后
+    //         console.log('自动wx.getUserInfo失败:', err)
+    //         // 显示主动授权的button
+    //         // this.buttonVisible = true
+    //       }
+    //     })
+    //   } else {
+    //     console.log('请升级微信版本')
+    //   }
+    // },
+    // getWxUserInfo () {
+    //   if (wx.canIUse('button.open-type.getUserInfo')) {
+    //     console.log(this.isLogin)
+    //   } else {
+    //     console.log('请升级微信版本')
+    //   }
+    // },
   }
 }
 </script>

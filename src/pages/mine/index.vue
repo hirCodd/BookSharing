@@ -8,13 +8,12 @@
     
     <div class="selfinfo">
       <van-card v-if="isLogin"
+        :title="userInfo.nickName"
         desc="该用户暂时没有介绍..."
-        title="userInfo.nickName"
-        thumb="https://i.loli.net/2017/08/21/599a521472424.jpg"
+        :thumb="userInfo.avatarUrl"
       />
       <van-card v-else
-        desc="1111该用户暂时没有介绍..."
-        title="userInfo.nickName"
+        title="登陆"
         thumb="https://i.loli.net/2017/08/21/599a521472424.jpg"
         @click="getInfo"
       />
@@ -38,6 +37,7 @@
         <van-cell-group>
           <van-cell title="设置" is-link @click="onClickSettings"/>
           <van-cell title="帮助与反馈" is-link @click="onClickFaq"/>
+          <van-cell title="退出登录" is-link @click="onClickClean"/>
         </van-cell-group>
       </div>
     </div>
@@ -46,20 +46,24 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      userInfo: [],
-      isLogin: false // 判断是否登录，默认未登陆
+      userInfos: []
     }
   },
   create () {
     // this.getSetting()
   },
+  computed: {
+    ...mapGetters(['userInfo', 'isLogin'])
+  },
   mounted () {
     this.isLoginFun()
   },
   methods: {
+    ...mapMutations(['changeStatus', 'changeLoginStatus']),
     isLoginFun () {
       console.log(this.isLogin)
     },
@@ -116,6 +120,21 @@ export default {
     onClickFaq () {
       wx.navigateTo({
         url: '/pages/user-faq/main'
+      })
+    },
+    // 清除登陆状态
+    onClickClean () {
+      let that = this
+      wx.showModal({
+        title: '提示',
+        content: '这是一个模态弹窗',
+        success (res) {
+          if (res.confirm) {
+            that.changeLoginStatus(false)
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
       })
     }
   }

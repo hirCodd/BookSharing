@@ -11,8 +11,7 @@
     "pages/user-selling/main",
     "pages/user-wish-booklist/main",
     "pages/user-settings/main",
-    "pages/user-faq/main",
-    "pages/login/main"
+    "pages/user-faq/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

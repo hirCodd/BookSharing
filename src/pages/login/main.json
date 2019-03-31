@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "我的",
+  "navigationBarTitleText": "微信授权登陆",
   "usingComponents": {
     "van-card": "../../static/vant/card/index",
     "van-button": "../../static/vant/button/index",

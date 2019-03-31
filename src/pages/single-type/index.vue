@@ -27,11 +27,15 @@
           placeholder="请输入书本价格"
         />
         <van-field
+          autosize
           label="书籍描述"
           type="textarea"
           placeholder="请输入书籍描述"
         />
       </van-cell-group>
+    </div>
+    <div class="submit-button"> 
+      <van-button round type="default">圆形按钮</van-button>
     </div>
   </div>
 </template>
