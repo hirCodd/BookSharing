@@ -120,13 +120,10 @@ export default {
   methods: {
     // 测试连接
     getData () {
-      this.$fly.request({
-        method: 'get', // post/get 请求方式
-        url: '/users',
-        body: {}
+      const that = this
+      that.$fly.get('/get/all_books', {
       }).then(res => {
         console.log(res)
-        this.list = res.user
       })
     }
   }

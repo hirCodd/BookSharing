@@ -2,7 +2,7 @@
  * @Description: api request
  * @Author: finen
  * @Date: 2019-03-25 00:11:29
- * @LastEditTime: 2019-03-31 21:55:25
+ * @LastEditTime: 2019-04-01 23:10:07
  */
 
 // import Vue from 'vue'
@@ -21,7 +21,7 @@ import Fly from 'flyio/dist/npm/wx'
 const fly = new Fly()
 // Vue.prototype.$http=fly
 const host = 'http://127.0.0.1:5000/api/v1/'
-// const host = 'http://wexapi.free.idcfengye.com/api/v1/'
+// const host = 'http://weappx.free.idcfengye.com/api/v1/'
 // 添加请求拦截器
 fly.interceptors.request.use((request) => {
   wx.showLoading({

@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "发布单本书",
+  "navigationBarTitleText": "发布",
   "usingComponents": {
     "van-cell-group": "../../static/vant/cell-group/index",
     "van-field": "../../static/vant/field/index",

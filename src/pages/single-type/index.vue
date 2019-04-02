@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="publish-title">
-
+      <h4>发布单本书</h4>
     </div>
     <div class="publish-user-info">
       <van-cell-group>
@@ -15,6 +15,21 @@
           label="电话号码"
           placeholder="请输入电话号码"
           @change="changePhone"
+        />
+        <van-field
+          label="联系人所在省"
+          placeholder="请输入联系人地址"
+          @change="changeProvince"
+        />
+        <van-field
+          label="联系人城市"
+          placeholder="请输入联系人地址"
+          @change="changeCity"
+        />
+        <van-field
+          label="联系人区县"
+          placeholder="请输入联系人地址"
+          @change="changeRegion"
         />
         <van-field
           label="联系人地址"
@@ -46,9 +61,10 @@
     </div>
     <div class="submit-button">
       <van-button
+        custom-class="submit-custom"
         @click="submitBookInfo"
         round
-        type="default">圆形按钮
+        type="default">提交
       </van-button>
     </div>
   </div>
@@ -57,10 +73,12 @@
 export default {
   data () {
     return {
-      userName: 'ssss',
       bookInfo: {
-        userName: 'ssss',
-        phone: 'fafa',
+        userName: '',
+        phone: '',
+        province: '',
+        city: '',
+        region: '',
         address: '',
         bookName: '',
         bookPrice: '',
@@ -78,6 +96,13 @@ export default {
       console.log(that.bookInfo.userName)
     },
     submitBookInfo () {
+      const that = this
+      // 提交到api
+      that.$fly.post('/publish/single', {
+        data: that.bookInfo
+      }).then(res => {
+        console.log(res)
+      })
       console.log(this.bookInfo)
     },
     /**
@@ -89,6 +114,15 @@ export default {
     },
     changePhone (e) {
       this.bookInfo.phone = e.mp.detail
+    },
+    changeProvince (e) {
+      this.bookInfo.province = e.mp.detail
+    },
+    changeCity (e) {
+      this.bookInfo.city = e.mp.detail
+    },
+    changeRegion (e) {
+      this.bookInfo.region = e.mp.detail
     },
     changeAddress (e) {
       this.bookInfo.address = e.mp.detail
@@ -107,7 +141,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
 .publish-user-info {
   width: 100%;
   margin-top: 20rpx;
@@ -115,5 +149,8 @@ export default {
 .publish-book-info {
   width: 100%;
   margin-top: 20rpx;
+}
+.submit-custom {
+  margin-top: 40rpx;
 }
 </style>
