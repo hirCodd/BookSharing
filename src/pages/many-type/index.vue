@@ -94,14 +94,8 @@ export default {
     }
   },
   mounted () {
-    this.show()
   },
   methods: {
-    show () {
-      var that = this
-      console.log(that.userName)
-      console.log(that.bookInfo.userName)
-    },
     submitBookInfo () {
       const that = this
       // 提交到api
@@ -109,6 +103,20 @@ export default {
         data: that.bookInfo
       }).then(res => {
         console.log(res)
+        wx.showModal({
+          title: '提示',
+          content: '是否确定发布？',
+          success (res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+              wx.navigateBack({
+                delta: 1
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
       })
     },
     /**
