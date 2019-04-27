@@ -57,6 +57,23 @@
           placeholder="请输入书籍描述"
           @change="changeBookDesc"
         />
+        <van-field
+          autosize
+          disabled
+          label="上传图片"
+        />
+        <div class="weui-uploader__bd">
+          <div class="weui-uploader__files" id="uploaderFiles">
+            <block v-for="item in files" :key="index">
+              <div class="weui-uploader__file" @click="predivImage" :id="item">
+                <image class="weui-uploader__img" :src="item" mode="aspectFill" />
+              </div>
+            </block>
+          </div>
+          <div class="weui-uploader__input-box">
+            <div class="weui-uploader__input" @click="chooseImage"></div>
+          </div>
+        </div>
       </van-cell-group>
     </div>
     <div class="submit-button">
@@ -92,8 +109,6 @@ export default {
   methods: {
     show () {
       var that = this
-      console.log(that.userName)
-      console.log(that.bookInfo.userName)
     },
     submitBookInfo () {
       const that = this
@@ -102,8 +117,45 @@ export default {
         data: that.bookInfo
       }).then(res => {
         console.log(res)
+        wx.showModal({
+          title: '提示',
+          content: '是否确定发布？',
+          success (res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+              wx.navigateBack({
+                delta: 1
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
       })
-      console.log(this.bookInfo)
+    },
+    chooseImage (e) {
+      var _this = this
+      wx.chooseImage({
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success: function (res) {
+          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+          _this.files = _this.files.concat(res.tempFilePaths)
+        },
+        fail: function () {
+          console.log('fail')
+        },
+        complete: function () {
+          console.log('commplete')
+        }
+      })
+    },
+    predivImage (e) {
+      console.log(e)
+      wx.previewImage({
+        current: e.currentTarget.id, // 当前显示图片的http链接
+        urls: this.files // 需要预览的图片http链接列表
+      })
     },
     /**
      * 以下函数用于监听数据变化
