@@ -11,3 +11,4 @@ static/iview
 *.ntvs*
 *.njsproj
 *.sln
+src/utils/config/config.js

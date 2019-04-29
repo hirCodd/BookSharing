@@ -67,10 +67,11 @@
           disabled
           label="上传图片"
         />
-        <div class="weui-uploader__bd">
+        <div class="weui-uploader__bd th-backwhite clearfix">
           <div class="weui-uploader__files" id="uploaderFiles">
-            <block v-for="item in files" :key="index">
-              <div class="weui-uploader__file" @click="predivImage" :id="item">
+            <block v-for="(item,index) in files" :key="index">
+              <div class="weui-uploader__file posi-rela" @click="predivImage" :id="item">
+                <icon type="cancel" size="20" class="th-icon-cancel" @click.stop="deletImg(index)"/>
                 <image class="weui-uploader__img" :src="item" mode="aspectFill" />
               </div>
             </block>
@@ -81,14 +82,7 @@
         </div>
       </van-cell-group>
     </div>
-    <div class="submit-button">
-      <van-button
-        custom-class="submit-custom"
-        @click="submitBookInfo"
-        round
-        type="default">提交
-      </van-button>
-    </div>
+    <div class="th-submit-btn" @click="submitBookInfo">提交</div>
   </div>
 </template> 
 
@@ -108,7 +102,8 @@ export default {
         bookDesc: '',
         bookNum: ''
       },
-      files: []
+      files: [],
+      filesOnline: []
     }
   },
   mounted () {
@@ -145,6 +140,16 @@ export default {
         success: function (res) {
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
           _this.files = _this.files.concat(res.tempFilePaths)
+          var tempFilePaths = res.tempFilePaths
+          // console.log(tempFilePaths)
+          wx.uploadFile({
+            url: 'http://asdasdasdsadasdasd',
+            filePath: tempFilePaths[0],
+            name: 'file',
+            success: function (res) {
+              _this.filesOnline = _this.filesOnline.concat(JSON.parse(res.data).data)
+            }
+          })
         },
         fail: function () {
           console.log('fail')
@@ -160,6 +165,10 @@ export default {
         current: e.currentTarget.id, // 当前显示图片的http链接
         urls: this.files // 需要预览的图片http链接列表
       })
+    },
+    deletImg (index) {
+      this.files.splice(index, 1)
+      this.filesOnline.splice(index, 1)
     },
     /**
      * 以下函数用于监听数据变化
@@ -201,8 +210,43 @@ export default {
 
 
 <style>
-.weui-uploader__bd {
-  margin: 5px 5px;
+.th-icon-cancel{
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+  right: -14rpx;
+  top: -14rpx;
+}
+.weui-uploader__input-box{
+  margin-right: 0;
+}
+.weui-uploader__bd{
+  margin-bottom: 0;
+}
+.posi-rela{
+  position: relative;
+  overflow: visible;
+}
+.weui-uploader__file:nth-child(4n){
+  margin-right: 0;
+}
+.th-backwhite{
+  width: 750rpx;
+  padding: 20rpx 30rpx;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-bottom:4rpx solid #f5f5f5;
+}
+.th-submit-btn{
+  width: 690rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: #18c136;
+  margin: 50rpx auto;
+  color: #fff;
+  font-size: 34rpx;
+  text-align: center;
+  border-radius: 6rpx;
 }
 .publish-user-info {
   width: 100%;
