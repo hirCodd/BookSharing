@@ -3,31 +3,26 @@
  * @Author: your name
  * @LastEditors: Please set LastEditors
  * @Date: 2019-04-29 01:10:12
- * @LastEditTime: 2019-04-29 23:36:06
+ * @LastEditTime: 2019-04-30 00:55:44
  */
 const config = require('../config/config')
-const cosUrl = 'https://' + config.cos_region + '.file.myqcloud.com/files/v2/' + config.cos_appid + '/' + config.cos_bucket_name + config.cos_dir_name
-
-var cosSignatureUrl = config.host + '/v1/qc_cos/config?cos_path=' + config.cos_dir_name
+const cosUrl = 'https://' + config.cos_bucket_name + '.cos.' + config.cos_region + '.myqcloud.com'
+var cosSignatureUrl = config.host + '/get/auths'
 
 /**
  * @description:  实现文件上传功能
  * @param {type} filePath: 文件路径 fileName: 文件名称
  * @return: 返回上传的路径
  */
-function upload(filePath, fileName, that) {
+function upload (filePath, fileName, that) {
   let data = null
   wx.request({
     url: cosSignatureUrl,
-    header: {
-      Authorization: 'JWT' + ' ' + that.data.jwt.access_token
-    },
     success: function (cosRes) {
       // 获取签名
-      var signature = cosRes.data.sign;
-
+      let signature = cosRes.data.sign
       // 头部带上签名，上传文件至COS
-      var uploadTask = wx.uploadFile({
+      let uploadTask = wx.uploadFile({
         url: cosUrl + '/' + fileName,
         filePath: filePath,
         header: {
@@ -39,13 +34,13 @@ function upload(filePath, fileName, that) {
         },
         success: function (uploadRes) {
           // 上传成功后的操作
-          var upload_res = JSON.parse(uploadRes.data)
-          var files = that.data.files;
-          files.push(upload_res.data.source_url);
+          let uploadResponse = JSON.parse(uploadRes.data)
+          let files = that.data.files
+          files.push(uploadResponse.data.source_url)
           that.setData({
-            upload_res: upload_res,
+            uploadResponse: uploadResponse,
             files: files,
-            test_image: upload_res.data.source_url
+            test_image: uploadResponse.data.source_url
           })
         },
         fail: function (e) {

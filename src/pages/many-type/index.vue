@@ -7,32 +7,38 @@
       <van-cell-group>
         <van-field
           label="联系人姓名"
+          name="userName"
           placeholder="请输入联系人姓名"
           :value="userName"
           @change="changeUserName"
         />
         <van-field
           label="电话号码"
+          name="phone"
           placeholder="请输入电话号码"
           @change="changePhone"
         />
         <van-field
-          label="联系人所在省"
+          label="联系人省份"
+          name="province"
           placeholder="请输入联系人地址"
           @change="changeProvince"
         />
         <van-field
           label="联系人城市"
+          name="city"
           placeholder="请输入联系人地址"
           @change="changeCity"
         />
         <van-field
           label="联系人区县"
+          name="region"
           placeholder="请输入联系人地址"
           @change="changeRegion"
         />
         <van-field
           label="联系人地址"
+          name="address"
           placeholder="请输入联系人地址"
           @change="changeAddress"
         />
@@ -42,22 +48,26 @@
       <van-cell-group>
         <van-field
           label="书籍名称"
+          name="bookName"
           placeholder="请输入书籍名称"
           @change="changeBookName"
         />
         <van-field
           label="书本价格"
+          name="bookPrice"
           placeholder="请输入书本价格"
           @change="changeBookPrice"
         />
          <van-field
           label="书籍本数"
+          name="bookNum"
           placeholder="请输入书籍本数"
           @change="changeBookNum"
         />
         <van-field
           autosize
           label="书籍描述"
+          name="bookDesc"
           type="textarea"
           placeholder="请输入书籍描述"
           @change="changeBookDesc"
@@ -87,6 +97,7 @@
 </template> 
 
 <script>
+import WxValidate from '../../utils/wx-validate/WxValidate.js'
 export default {
   data () {
     return {
@@ -106,22 +117,66 @@ export default {
       filesOnline: []
     }
   },
+  onLoad () {
+    this.initValidate()
+  },
   mounted () {
   },
   methods: {
+    /**
+     * 以下函数用于监听数据变化
+     * @param e
+     */
+    changeUserName (e) {
+      this.bookInfo.userName = e.mp.detail
+    },
+    changePhone (e) {
+      this.bookInfo.phone = e.mp.detail
+    },
+    changeProvince (e) {
+      this.bookInfo.province = e.mp.detail
+    },
+    changeCity (e) {
+      this.bookInfo.city = e.mp.detail
+    },
+    changeRegion (e) {
+      this.bookInfo.region = e.mp.detail
+    },
+    changeAddress (e) {
+      this.bookInfo.address = e.mp.detail
+    },
+    changeBookNum (e) {
+      this.bookInfo.bookNum = e.mp.detail
+    },
+    changeBookName (e) {
+      this.bookInfo.bookName = e.mp.detail
+    },
+    changeBookPrice (e) {
+      this.bookInfo.bookPrice = e.mp.detail
+    },
+    changeBookDesc (e) {
+      this.bookInfo.bookDesc = e.mp.detail
+    },
     submitBookInfo () {
       const that = this
-      // 提交到api
-      that.$fly.post('/publish/many', {
-        data: that.bookInfo
-      }).then(res => {
-        console.log(res)
+      const params = this.bookInfo
+      if (!this.WxValidate.checkForm(params)) {
+        const error = this.WxValidate.errorList[0].msg
         wx.showModal({
-          title: '提示',
+          title: error
+        })
+      } else {
+        // 通过数据校验的数据能够提交到api
+        wx.showModal({
+          title: '发布提示',
           content: '是否确定发布？',
           success (res) {
             if (res.confirm) {
               console.log('用户点击确定')
+              that.$fly.post('/publish/single', {
+                data: that.bookInfo
+              })
+              // 发布成功后自动返回发布页面
               wx.navigateBack({
                 delta: 1
               })
@@ -130,7 +185,12 @@ export default {
             }
           }
         })
-      })
+        // that.$fly.post('/publish/single', {
+        //   data: that.bookInfo
+        // }).then(res => {
+        //   // 当用户点击确定之后才真正的想后端发送数据，此处逻辑待修改
+        // })
+      }
     },
     chooseImage (e) {
       var _this = this
@@ -171,38 +231,78 @@ export default {
       this.filesOnline.splice(index, 1)
     },
     /**
-     * 以下函数用于监听数据变化
-     * @param e
+     * @description: 表单校验所需要的所有数据
      */
-    changeUserName (e) {
-      this.bookInfo.userName = e.mp.detail
-    },
-    changePhone (e) {
-      this.bookInfo.phone = e.mp.detail
-    },
-    changeProvince (e) {
-      this.bookInfo.province = e.mp.detail
-    },
-    changeCity (e) {
-      this.bookInfo.city = e.mp.detail
-    },
-    changeRegion (e) {
-      this.bookInfo.region = e.mp.detail
-    },
-    changeAddress (e) {
-      this.bookInfo.address = e.mp.detail
-    },
-    changeBookNum (e) {
-      this.bookInfo.bookNum = e.mp.detail
-    },
-    changeBookName (e) {
-      this.bookInfo.bookName = e.mp.detail
-    },
-    changeBookPrice (e) {
-      this.bookInfo.bookPrice = e.mp.detail
-    },
-    changeBookDesc (e) {
-      this.bookInfo.bookDesc = e.mp.detail
+    initValidate () {
+      const rules = {
+        userName: {
+          required: true,
+          minLength: 2
+        },
+        phone: {
+          required: true,
+          minLength: 11
+        },
+        province: {
+          required: true
+        },
+        city: {
+          required: true
+        },
+        region: {
+          required: true
+        },
+        address: {
+          required: true
+        },
+        bookName: {
+          required: true
+        },
+        bookPrice: {
+          required: true
+        },
+        bookNum: {
+          required: true
+        },
+        bookDesc: {
+          required: true
+        }
+      }
+      const messages = {
+        userName: {
+          required: '请输入联系人姓名',
+          rangelength: '请输入2~4个汉字个汉字'
+        },
+        phone: {
+          required: '请输入联系人电话号码',
+          rangelength: '请输入正确的电话号码'
+        },
+        province: {
+          required: '请输入联系人省份'
+        },
+        city: {
+          required: '请输入联系人城市'
+        },
+        region: {
+          required: '请输入联系人地区'
+        },
+        address: {
+          required: '请输入联系人地址'
+        },
+        bookName: {
+          required: '请输入书籍名称'
+        },
+        bookPrice: {
+          required: '请输入正确的书籍价格'
+        },
+        bookNum: {
+          required: '请输入书籍数量'
+        },
+        bookDesc: {
+          required: '请输入书籍描述'
+        }
+      }
+      this.WxValidate = new WxValidate(rules, messages)
     }
   }
 }

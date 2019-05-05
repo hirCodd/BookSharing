@@ -76,6 +76,10 @@ export default {
       }).then(res => {
         this.list = res
       })
+      that.$fly.get('/users', {
+      }).then(res => {
+        console.log(res)
+      })
     }
   },
   filters: {
