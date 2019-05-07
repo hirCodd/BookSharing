@@ -3,7 +3,7 @@
  * @Author: your name
  * @LastEditors: Please set LastEditors
  * @Date: 2019-03-12 23:42:41
- * @LastEditTime: 2019-05-05 23:56:11
+ * @LastEditTime: 2019-05-08 00:40:11
  -->
 <template>
   <div class="container">
@@ -76,6 +76,7 @@
         <van-field
           autosize
           disabled
+          name="images"
           label="上传图片"
         />
         <div class="weui-uploader__bd th-backwhite clearfix">
@@ -111,13 +112,16 @@ export default {
         address: '',
         bookName: '',
         bookPrice: '',
-        bookDesc: ''
+        bookDesc: '',
+        images: ''
       },
       files: [],
       filesOnline: []
     }
   },
   onLoad () {
+    this.files = []
+    this.filesOnline = [] // 用户上传完成后置空
     this.initValidate()
   },
   mounted () {
@@ -174,13 +178,16 @@ export default {
           success (res) {
             if (res.confirm) {
               console.log('用户点击确定')
-              that.$fly.post('/publish/single', {
+              that.uploadImage()
+              // 将存储图片的数据转化为字符串传入后端
+              that.bookInfo.images = that.filesOnline.join(',')
+              that.$fly.post('/books/single', {
                 data: that.bookInfo
               })
-              // 发布成功后自动返回发布页面
-              wx.navigateBack({
-                delta: 1
-              })
+              // // 发布成功后自动返回发布页面
+              // wx.navigateBack({
+              //   delta: 1
+              // })
             } else if (res.cancel) {
               console.log('用户点击取消')
             }
@@ -189,24 +196,13 @@ export default {
       }
     },
     chooseImage (e) {
-      var _this = this
+      var that = this
       wx.chooseImage({
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function (res) {
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-          _this.files = _this.files.concat(res.tempFilePaths)
-          var tempFilePaths = res.tempFilePaths
-          // console.log(tempFilePaths)
-          wx.uploadFile({
-            // 为了实现简单，不想腾讯云cos进行上传文件，而是想服务器直接上传文件
-            url: 'http://asdasdasdsadasdasd',
-            filePath: tempFilePaths[0],
-            name: 'file',
-            success: function (res) {
-              _this.filesOnline = _this.filesOnline.concat(JSON.parse(res.data).data)
-            }
-          })
+          that.files = that.files.concat(res.tempFilePaths)
         },
         fail: function () {
           console.log('fail')
@@ -217,7 +213,6 @@ export default {
       })
     },
     predivImage (e) {
-      console.log(e)
       wx.previewImage({
         current: e.currentTarget.id, // 当前显示图片的http链接
         urls: this.files // 需要预览的图片http链接列表
@@ -226,6 +221,26 @@ export default {
     deletImg (index) {
       this.files.splice(index, 1)
       this.filesOnline.splice(index, 1)
+    },
+    uploadImage (data) {
+      // var _this = this
+      // 上传处理
+      for (let i = 0; i < this.files.length; i++) {
+        wx.uploadFile({
+          url: 'https://sm.ms/api/upload', // 上传地址
+          filePath: this.files[i], // 上传图片路径
+          name: 'smfile',
+          success: res => {
+            let imgres = res.data
+            let img = JSON.parse(imgres)
+            // 将多个图片的地址发布到bookInfo中
+            this.filesOnline.push(img.data.url)
+          },
+          fail: function () {
+            console.log('fail')
+          }
+        })
+      }
     },
     /**
      * @description: 表单校验所需要的所有数据

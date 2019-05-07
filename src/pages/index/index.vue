@@ -31,7 +31,7 @@
             :price="item.book_price"
             :desc="item.book_desc"
             :title="item.book_name"
-            thumb="https://i.loli.net/2017/08/21/599a521472424.jpg"
+            :thumb="item.book_img_url"
           >
           </van-card>
         </view>
@@ -60,6 +60,7 @@ export default {
   data () {
     return {
       list: [],
+      temp: [],
       wish_num: 0
     }
   },
@@ -74,7 +75,20 @@ export default {
       const that = this
       that.$fly.get('/get/all_books', {
       }).then(res => {
+        this.temp = res
+        console.log(this.temp)
+        // console.log(this.list['book_img_url'])
+        // this.temp.forEach(element => {
+        //   console.log(element)
+        //   console.log(element.book_img_url.split(',')[0])
+        // })
         this.list = res
+        for (let i = 0; i < this.temp.length; i++) {
+          this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
+          // console.log('ss')
+          // console.log(this.temp[i].book_img_url.split(',')[0])
+        }
+        console.log(res)
       })
       that.$fly.get('/users', {
       }).then(res => {

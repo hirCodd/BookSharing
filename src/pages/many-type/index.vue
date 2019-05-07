@@ -173,7 +173,7 @@ export default {
           success (res) {
             if (res.confirm) {
               console.log('用户点击确定')
-              that.$fly.post('/publish/single', {
+              that.$fly.post('/publish/many', {
                 data: that.bookInfo
               })
               // 发布成功后自动返回发布页面
