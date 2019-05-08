@@ -32,12 +32,6 @@
         "selectedIconPath": "/static/icon/home_se.png"
       },
       {
-        "pagePath": "pages/mini-chat/main",
-        "text": "微聊",
-        "iconPath": "/static/icon/chat.png",
-        "selectedIconPath": "/static/icon/chat_se.png"
-      },
-      {
         "pagePath": "pages/publish/main",
         "text": "发布",
         "iconPath": "/static/icon/add.png",

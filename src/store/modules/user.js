@@ -15,6 +15,7 @@ const mutations = {
     // state._status = state._status ? false : true;
     console.log('param:', param)
     state._userInfo = param
+    console.log(state._userInfo)
   },
   changeLoginStatus (state, status) {
     state.isLogin = status

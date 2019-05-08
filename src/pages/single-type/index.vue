@@ -3,7 +3,7 @@
  * @Author: your name
  * @LastEditors: Please set LastEditors
  * @Date: 2019-03-12 23:42:41
- * @LastEditTime: 2019-05-08 00:40:11
+ * @LastEditTime: 2019-05-08 23:46:34
  -->
 <template>
   <div class="container">
@@ -116,7 +116,8 @@ export default {
         images: ''
       },
       files: [],
-      filesOnline: []
+      filesOnline: [],
+      file: ''
     }
   },
   onLoad () {
@@ -158,7 +159,6 @@ export default {
     changeBookDesc (e) {
       this.bookInfo.bookDesc = e.mp.detail
     },
-    // 处理表单数据校验
     /**
      * @description: 通过表单验证的数据才能够想后端发送，而不能通过的数据提示用户输入正确的数据，直到用户输入正确
      */
@@ -179,15 +179,10 @@ export default {
             if (res.confirm) {
               console.log('用户点击确定')
               that.uploadImage()
-              // 将存储图片的数据转化为字符串传入后端
-              that.bookInfo.images = that.filesOnline.join(',')
-              that.$fly.post('/books/single', {
-                data: that.bookInfo
+              // 发布成功后自动返回发布页面
+              wx.navigateBack({
+                delta: 1
               })
-              // // 发布成功后自动返回发布页面
-              // wx.navigateBack({
-              //   delta: 1
-              // })
             } else if (res.cancel) {
               console.log('用户点击取消')
             }
@@ -224,6 +219,7 @@ export default {
     },
     uploadImage (data) {
       // var _this = this
+      var that = this
       // 上传处理
       for (let i = 0; i < this.files.length; i++) {
         wx.uploadFile({
@@ -233,8 +229,15 @@ export default {
           success: res => {
             let imgres = res.data
             let img = JSON.parse(imgres)
-            // 将多个图片的地址发布到bookInfo中
-            this.filesOnline.push(img.data.url)
+            that.filesOnline.push(img.data.url)
+            // 将存储图片的数据转化为字符串传入后端
+            that.bookInfo.images = that.filesOnline.join(',')
+            // 只有全部数据都存在才上传到后端(此处由于微信小程序的bug不能直接上传，所以需要进行判断数据)
+            if (that.files.length === that.filesOnline.length) {
+              that.$fly.post('/books/single', {
+                data: that.bookInfo
+              })
+            }
           },
           fail: function () {
             console.log('fail')

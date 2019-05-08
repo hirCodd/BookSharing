@@ -2,77 +2,44 @@
   <div class="container">
     <!-- 列表 -->
     <div class="list-content">
-      <van-panel use-footer-slot>
+      <van-panel 
+        use-footer-slot   
+        custom-class="book-info" 
+        header-class="book-info-header" 
+        footer-class="book-info-footer"
+        v-for="(item, index) in list"
+        :key="item.index">
         <view slot="header">
           <van-card
-          num="2"
-          price="10.00"
-          desc="描述信息"
-          title="标题"
-          thumb="https://i.loli.net/2017/08/21/599a521472424.jpg"
+            custom-class="card-info"
+            title-class="book-title"
+            desc-class="book-desc"
+            price-class="book-price"
+            num-class="book-num"
+            :num="item.book_number"
+            :price="item.book_price"
+            :desc="item.book_desc"
+            :title="item.book_name"
+            :thumb="item.book_img_url"
           >
           </van-card>
         </view>
+        <hr>
          <view slot="footer">
           <van-row>
           <van-col span="12">
-            点赞:
             <van-icon name="like-o" />
-          </van-col>
-          <van-col span="12">
-            666人想要
-          </van-col>
-        </van-row>
-        </view>
-      </van-panel>
-
-      <van-panel use-footer-slot>
-        <view slot="header">
-          <van-card
-          num="2"
-          price="10.00"
-          desc="描述信息"
-          title="标题"
-          thumb="https://i.loli.net/2017/08/21/599a521472424.jpg"
-          >
-          </van-card>
-        </view>
-         <view slot="footer">
-          <van-row>
-          <van-col span="12">
-            点赞:
-            <van-icon name="like-o" />
-          </van-col>
-          <van-col span="12">
-            666人想要
-          </van-col>
-        </van-row>
-        </view>
-      </van-panel>
-
-      <van-panel use-footer-slot>
-        <view slot="header">
-          <van-card
-          num="2"
-          price="10.00"
-          desc="描述信息"
-          title="标题"
-          thumb="https://i.loli.net/2017/08/21/599a521472424.jpg"
-          >
-          </van-card>
-        </view>
-         <view slot="footer">
-          <van-row>
-          <van-col span="12">
             加入心愿书单
-            <van-icon name="like-o" />
           </van-col>
           <van-col span="12">
-            666人想要
+            {{item.wish_num}}人想要
           </van-col>
         </van-row>
         </view>
       </van-panel>
+      <!-- <div class="show" v-for="item in list">
+        {{item}}
+      </div> -->
     </div>
   </div>
 </template>

@@ -65,30 +65,22 @@ export default {
     }
   },
   created () {
-    // this.getUserInfo()
+  },
+  onLoad () {
     this.getData()
-    // this.getSetting()
   },
   methods: {
     // 测试连接
     getData () {
       const that = this
-      that.$fly.get('/get/all_books', {
+      that.$fly.get('/books/all', {
       }).then(res => {
+        // 解析图片地址
         this.temp = res
-        console.log(this.temp)
-        // console.log(this.list['book_img_url'])
-        // this.temp.forEach(element => {
-        //   console.log(element)
-        //   console.log(element.book_img_url.split(',')[0])
-        // })
         this.list = res
         for (let i = 0; i < this.temp.length; i++) {
           this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
-          // console.log('ss')
-          // console.log(this.temp[i].book_img_url.split(',')[0])
         }
-        console.log(res)
       })
       that.$fly.get('/users', {
       }).then(res => {

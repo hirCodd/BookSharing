@@ -157,6 +157,9 @@ export default {
     changeBookDesc (e) {
       this.bookInfo.bookDesc = e.mp.detail
     },
+    /**
+     * @description: 通过表单验证的数据才能够想后端发送，而不能通过的数据提示用户输入正确的数据，直到用户输入正确
+     */
     submitBookInfo () {
       const that = this
       const params = this.bookInfo
@@ -173,9 +176,7 @@ export default {
           success (res) {
             if (res.confirm) {
               console.log('用户点击确定')
-              that.$fly.post('/publish/many', {
-                data: that.bookInfo
-              })
+              that.uploadImage()
               // 发布成功后自动返回发布页面
               wx.navigateBack({
                 delta: 1
@@ -185,31 +186,16 @@ export default {
             }
           }
         })
-        // that.$fly.post('/publish/single', {
-        //   data: that.bookInfo
-        // }).then(res => {
-        //   // 当用户点击确定之后才真正的想后端发送数据，此处逻辑待修改
-        // })
       }
     },
     chooseImage (e) {
-      var _this = this
+      var that = this
       wx.chooseImage({
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function (res) {
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-          _this.files = _this.files.concat(res.tempFilePaths)
-          var tempFilePaths = res.tempFilePaths
-          // console.log(tempFilePaths)
-          wx.uploadFile({
-            url: 'http://asdasdasdsadasdasd',
-            filePath: tempFilePaths[0],
-            name: 'file',
-            success: function (res) {
-              _this.filesOnline = _this.filesOnline.concat(JSON.parse(res.data).data)
-            }
-          })
+          that.files = that.files.concat(res.tempFilePaths)
         },
         fail: function () {
           console.log('fail')
@@ -220,7 +206,6 @@ export default {
       })
     },
     predivImage (e) {
-      console.log(e)
       wx.previewImage({
         current: e.currentTarget.id, // 当前显示图片的http链接
         urls: this.files // 需要预览的图片http链接列表
@@ -229,6 +214,34 @@ export default {
     deletImg (index) {
       this.files.splice(index, 1)
       this.filesOnline.splice(index, 1)
+    },
+    uploadImage (data) {
+      // var _this = this
+      var that = this
+      // 上传处理
+      for (let i = 0; i < this.files.length; i++) {
+        wx.uploadFile({
+          url: 'https://sm.ms/api/upload', // 上传地址
+          filePath: this.files[i], // 上传图片路径
+          name: 'smfile',
+          success: res => {
+            let imgres = res.data
+            let img = JSON.parse(imgres)
+            that.filesOnline.push(img.data.url)
+            // 将存储图片的数据转化为字符串传入后端
+            that.bookInfo.images = that.filesOnline.join(',')
+            // 只有全部数据都存在才上传到后端(此处由于微信小程序的bug不能直接上传，所以需要进行判断数据)
+            if (that.files.length === that.filesOnline.length) {
+              that.$fly.post('/books/many', {
+                data: that.bookInfo
+              })
+            }
+          },
+          fail: function () {
+            console.log('fail')
+          }
+        })
+      }
     },
     /**
      * @description: 表单校验所需要的所有数据

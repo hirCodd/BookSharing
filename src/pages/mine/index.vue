@@ -26,9 +26,9 @@
       <div class="sell-info">
         <van-cell-group>
           <van-cell title="我发布的" value="20条" is-link @click="onClickPublish"/>
-          <van-cell title="我卖出的" value="20条" is-link @click="onClickSell"/>
+          <!-- <van-cell title="我卖出的" value="20条" is-link @click="onClickSell"/>
           <van-cell title="我买到的" value="20条" is-link @click="onClickGet"/>
-          <van-cell title="我的心愿书单" value="20条" is-link @click="onClickWish"/>
+          <van-cell title="我的心愿书单" value="20条" is-link @click="onClickWish"/> -->
         </van-cell-group>
       </div>
 
