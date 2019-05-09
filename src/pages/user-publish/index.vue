@@ -45,7 +45,29 @@
 </template>
 
 <script>
-
+import {mapGetters, mapMutations, mapActions} from 'vuex'
+export default {
+  data () {
+    return {
+      userId: ''
+    }
+  },
+  computed: {
+    ...mapGetters(['userInfo', 'isLogin', 'userData'])
+  },
+  mouted () {
+    this.queryUserPublishBook()
+  },
+  methods: {
+    // 改变用户登陆状态
+    ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData']),
+    queryUserPublishBook () {
+      this.$fly.post('/books/own', {
+        // user_id: userData.user_id
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

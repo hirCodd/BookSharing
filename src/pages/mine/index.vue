@@ -68,7 +68,6 @@ export default {
       console.log(this.isLogin)
     },
     getInfo () {
-      console.log('test on card')
       var url = '/pages/login/main'
       wx.navigateTo({url})
     },
