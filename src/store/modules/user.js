@@ -23,7 +23,7 @@ const mutations = {
   // params为用户后端的数据，主要是用来返回user_id
   changeUserData (state, params) {
     state.userData = params
-    console.log(params)
+    console.log(state.userData)
   }
 }
 

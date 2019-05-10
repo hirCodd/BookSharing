@@ -3,12 +3,15 @@
     <!-- 用于显示搜索 -->
     <div class="top-search">
       <van-search
-        custom-class="search"
+        v-model.lazy="keyword"
+        name="search"
         placeholder="请输入搜索关键词"
         use-action-slot
-        bind:search="onSearch"
-      >
-        <view slot="action" bind:tap="onSearch">搜索</view>
+        @search="searchValue"
+        @change="changeValue"
+        @clear="getData"
+        >
+        <view slot="action" @search="onSearch" @click="onSearch">搜索</view>
       </van-search>
     </div>
     <!-- 列表 -->
@@ -38,12 +41,13 @@
         <hr>
          <view slot="footer">
           <van-row>
-          <van-col span="12">
+          <van-col span="12"
+          @click="changeWish">
             <van-icon name="like-o" />
             加入心愿书单
           </van-col>
           <van-col span="12">
-            {{item.wish_num}}人想要
+            {{wish_num}}人想要
           </van-col>
         </van-row>
         </view>
@@ -59,6 +63,7 @@
 export default {
   data () {
     return {
+      keyword: '',
       list: [],
       temp: [],
       wish_num: 0
@@ -67,10 +72,35 @@ export default {
   created () {
   },
   onLoad () {
+  },
+  onShow () {
     this.getData()
   },
+  onPullDownRefresh () {
+  },
   methods: {
-    // 测试连接
+    searchValue (e) {
+      console.log(this.keyword)
+    },
+    changeValue (e) {
+      // 通过事件获取到keyword关键字
+      this.keyword = e.mp.detail
+    },
+    onSearch () {
+      this.$fly.get('/books/search', {
+        keyword: this.keyword
+      }).then(res => {
+        this.temp = res
+        this.list = res
+        for (let i = 0; i < this.temp.length; i++) {
+          this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
+        }
+      })
+    },
+    changeWish () {
+      this.wish_num++
+    },
+    // 获取所有数据
     getData () {
       const that = this
       that.$fly.get('/books/all', {
@@ -82,21 +112,20 @@ export default {
           this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
         }
       })
-      that.$fly.get('/users', {
-      }).then(res => {
-        console.log(res)
-      })
     }
   },
-  filters: {
-    ellipsis (value) {
-      if (!value) return ''
-      if (value.length > 8) {
-        return value.slice(0, 8) + '...'
-      }
-      return value
-    }
+  test () {
+    console.log(this.keyword)
   }
+  // filters: {
+  //   ellipsis (value) {
+  //     if (!value) return ''
+  //     if (value.length > 8) {
+  //       return value.slice(0, 8) + '...'
+  //     }
+  //     return value
+  //   }
+  // }
 }
 </script>
 

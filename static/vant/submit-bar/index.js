@@ -1,7 +1,7 @@
 import { VantComponent } from '../common/component';
-import { iphonex } from '../mixins/iphonex';
+import { safeArea } from '../mixins/safe-area';
 VantComponent({
-    mixins: [iphonex],
+    mixins: [safeArea()],
     classes: [
         'bar-class',
         'price-class',
@@ -9,6 +9,7 @@ VantComponent({
     ],
     props: {
         tip: null,
+        tipIcon: String,
         type: Number,
         price: null,
         label: String,
@@ -22,6 +23,10 @@ VantComponent({
         buttonType: {
             type: String,
             value: 'danger'
+        },
+        decimalLength: {
+            type: Number,
+            value: 2
         }
     },
     computed: {
@@ -29,7 +34,7 @@ VantComponent({
             return typeof this.data.price === 'number';
         },
         priceStr() {
-            return (this.data.price / 100).toFixed(2);
+            return (this.data.price / 100).toFixed(this.data.decimalLength);
         },
         tipStr() {
             const { tip } = this.data;

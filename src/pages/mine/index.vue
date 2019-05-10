@@ -25,7 +25,7 @@
       <!-- 个人销售信息 -->
       <div class="sell-info">
         <van-cell-group>
-          <van-cell title="我发布的" value="20条" is-link @click="onClickPublish"/>
+          <van-cell title="我发布的" :value="bookLength" is-link @click="onClickPublish"/>
           <!-- <van-cell title="我卖出的" value="20条" is-link @click="onClickSell"/>
           <van-cell title="我买到的" value="20条" is-link @click="onClickGet"/>
           <van-cell title="我的心愿书单" value="20条" is-link @click="onClickWish"/> -->
@@ -50,8 +50,16 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      userInfos: []
+      userInfos: [],
+      bookLength: ''
     }
+  },
+  onShow () {
+    this.queryUserPublishBook()
+    // Do something when page show.
+  },
+  onLoad () {
+    // this.queryUserPublishBook()
   },
   create () {
     // this.getSetting()
@@ -71,26 +79,6 @@ export default {
       var url = '/pages/login/main'
       wx.navigateTo({url})
     },
-    // getSetting () {
-    //   // var that = this
-    //   wx.getSetting({
-    //     success: function (res) {
-    //       if (res.authSetting['scope.userInfo']) {
-    //         wx.getUserInfo({
-    //           success: function (res) {
-    //             // this.avatar = res.userInfo
-    //             console.log(res.userInfo)
-    //             // that.avatar = res.u
-    //             // 用户已经授权过
-    //             console.log('用户已经授权过')
-    //           }
-    //         })
-    //       } else {
-    //         console.log('用户还未授权过')
-    //       }
-    //     }
-    //   })
-    // },
     onClickPublish () {
       wx.navigateTo({
         url: '/pages/user-publish/main'
@@ -135,6 +123,18 @@ export default {
           }
         }
       })
+    },
+    queryUserPublishBook () {
+      try {
+        const value = wx.getStorageSync('user_id')
+        this.$fly.get('/books/own', {
+          user_id: value
+        }).then(res => {
+          this.bookLength = res.length
+        })
+      } catch (e) {
+        console.log('Storage not exist!')
+      }
     }
   }
 }

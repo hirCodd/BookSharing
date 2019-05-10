@@ -25,7 +25,7 @@
           </van-card>
         </view>
         <hr>
-         <view slot="footer">
+         <!-- <view slot="footer">
           <van-row>
           <van-col span="12">
             <van-icon name="like-o" />
@@ -35,7 +35,7 @@
             {{item.wish_num}}人想要
           </van-col>
         </van-row>
-        </view>
+        </view> -->
       </van-panel>
       <!-- <div class="show" v-for="item in list">
         {{item}}
@@ -49,22 +49,38 @@ import {mapGetters, mapMutations, mapActions} from 'vuex'
 export default {
   data () {
     return {
-      userId: ''
+      userId: '',
+      list: []
     }
   },
   computed: {
     ...mapGetters(['userInfo', 'isLogin', 'userData'])
   },
-  mouted () {
+  onLoad () {
     this.queryUserPublishBook()
+  },
+  mouted () {
+    // this.queryUserPublishBook()
   },
   methods: {
     // 改变用户登陆状态
+    ...mapGetters(['userInfo', 'isLogin', 'userData']),
     ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData']),
     queryUserPublishBook () {
-      this.$fly.post('/books/own', {
-        // user_id: userData.user_id
-      })
+      try {
+        const value = wx.getStorageSync('user_id')
+        this.$fly.get('/books/own', {
+          user_id: value
+        }).then(res => {
+          this.temp = res
+          this.list = res
+          for (let i = 0; i < this.temp.length; i++) {
+            this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
+          }
+        })
+      } catch (e) {
+        console.log('Storage not exist!')
+      }
     }
   }
 }
