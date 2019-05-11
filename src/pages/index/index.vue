@@ -7,9 +7,10 @@
         name="search"
         placeholder="请输入搜索关键词"
         use-action-slot
-        @search="searchValue"
+        @search="onSearch"
         @change="changeValue"
         @clear="getData"
+        @blur="getData"
         >
         <view slot="action" @search="onSearch" @click="onSearch">搜索</view>
       </van-search>
@@ -77,15 +78,17 @@ export default {
     this.getData()
   },
   onPullDownRefresh () {
+    this.getData()
+    wx.stopPullDownRefresh()
   },
   methods: {
     searchValue (e) {
-      console.log(this.keyword)
     },
     changeValue (e) {
       // 通过事件获取到keyword关键字
       this.keyword = e.mp.detail
     },
+    // 进行搜索
     onSearch () {
       this.$fly.get('/books/search', {
         keyword: this.keyword

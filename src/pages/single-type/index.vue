@@ -3,7 +3,7 @@
  * @Author: your name
  * @LastEditors: Please set LastEditors
  * @Date: 2019-03-12 23:42:41
- * @LastEditTime: 2019-05-11 01:53:41
+ * @LastEditTime: 2019-05-11 16:21:10
  -->
 <template>
   <div class="container">
@@ -100,10 +100,13 @@
 
 <script>
 import WxValidate from '../../utils/wx-validate/WxValidate.js'
+import { mapGetters, mapMutations } from 'vuex'
+import store from '../../store/index.js'
 export default {
   data () {
     return {
       bookInfo: {
+        user_id: '',
         userName: '',
         phone: '',
         province: '',
@@ -116,14 +119,16 @@ export default {
         images: ''
       },
       files: [],
-      filesOnline: [],
-      file: ''
+      filesOnline: []
     }
   },
   onLoad () {
     this.files = []
     this.filesOnline = [] // 用户上传完成后置空
     this.initValidate()
+    this.changeUserId()
+  },
+  onShow () {
   },
   mounted () {
   },
@@ -132,6 +137,10 @@ export default {
      * 以下函数用于监听数据变化
      * @param e
      */
+    changeUserId () {
+      this.bookInfo.user_id = store.state.user.userData
+      console.log(this.bookInfo.user_id)
+    },
     changeUserName (e) {
       this.bookInfo.userName = e.mp.detail
     },

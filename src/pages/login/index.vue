@@ -59,11 +59,6 @@ export default {
                   that.$fly.post('/user/login', {
                     user_id: res.user_data[0].user_id
                   }).then(
-                    // 由于小程序限制,只能讲数据存入到Storage
-                    wx.setStorage({
-                      key: 'user_id',
-                      data: res.user_data[0].user_id
-                    }),
                     that.changeLoginStatus(true),
                     that.changeStatus(userInfo),
                     that.changeUserData(res.user_data[0].user_id),
@@ -84,10 +79,6 @@ export default {
                       user_id: res.user_id
                     }).then(
                       // 登陆之后都要将保存在vuex的数据保存
-                      wx.setStorage({
-                        key: 'user_id',
-                        data: res.user_data[0].user_id
-                      }),
                       that.changeLoginStatus(true),
                       that.changeStatus(userInfo),
                       that.changeUserData(res.user_id), // 仅保存当前用户数据

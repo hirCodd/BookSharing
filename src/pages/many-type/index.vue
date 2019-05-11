@@ -98,10 +98,13 @@
 
 <script>
 import WxValidate from '../../utils/wx-validate/WxValidate.js'
+import { mapGetters, mapMutations } from 'vuex'
+import store from '../../store/index.js'
 export default {
   data () {
     return {
       bookInfo: {
+        user_id: '',
         userName: '',
         phone: '',
         province: '',
@@ -118,7 +121,10 @@ export default {
     }
   },
   onLoad () {
+    this.files = []
+    this.filesOnline = [] // 用户上传完成后置空
     this.initValidate()
+    this.changeUserId()
   },
   mounted () {
   },
@@ -127,6 +133,9 @@ export default {
      * 以下函数用于监听数据变化
      * @param e
      */
+    changeUserId () {
+      this.bookInfo.user_id = store.getters.userData
+    },
     changeUserName (e) {
       this.bookInfo.userName = e.mp.detail
     },

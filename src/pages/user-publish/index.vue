@@ -46,6 +46,7 @@
 
 <script>
 import {mapGetters, mapMutations, mapActions} from 'vuex'
+import store from '../../store/index.js'
 export default {
   data () {
     return {
@@ -67,20 +68,16 @@ export default {
     ...mapGetters(['userInfo', 'isLogin', 'userData']),
     ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData']),
     queryUserPublishBook () {
-      try {
-        const value = wx.getStorageSync('user_id')
-        this.$fly.get('/books/own', {
-          user_id: value
-        }).then(res => {
-          this.temp = res
-          this.list = res
-          for (let i = 0; i < this.temp.length; i++) {
-            this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
-          }
-        })
-      } catch (e) {
-        console.log('Storage not exist!')
-      }
+      this.userId = store.state.user.userData
+      this.$fly.get('/books/own', {
+        user_id: this.userId
+      }).then(res => {
+        this.temp = res
+        this.list = res
+        for (let i = 0; i < this.temp.length; i++) {
+          this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
+        }
+      })
     }
   }
 }

@@ -7,12 +7,14 @@
     -->
     
     <div class="selfinfo">
-      <van-card v-if="isLogin"
+      <van-card 
+        v-if="isLogin"
         :title="userInfo.nickName"
         desc="该用户暂时没有介绍..."
         :thumb="userInfo.avatarUrl"
       />
-      <van-card v-else
+      <van-card 
+        v-else
         title="登陆"
         thumb="https://i.loli.net/2017/08/21/599a521472424.jpg"
         @click="getInfo"
@@ -25,7 +27,8 @@
       <!-- 个人销售信息 -->
       <div class="sell-info">
         <van-cell-group>
-          <van-cell title="我发布的" :value="bookLength" is-link @click="onClickPublish"/>
+          <van-cell title="我发布的" v-if="isLogin" is-link @click="onClickPublish"/>
+          <van-cell title="我发布的" v-else is-link/>
           <!-- <van-cell title="我卖出的" value="20条" is-link @click="onClickSell"/>
           <van-cell title="我买到的" value="20条" is-link @click="onClickGet"/>
           <van-cell title="我的心愿书单" value="20条" is-link @click="onClickWish"/> -->
@@ -47,16 +50,17 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import store from '../../store/index.js'
 export default {
   data () {
     return {
-      userInfos: [],
-      bookLength: ''
+      bookLength: '',
+      user_id: ''
     }
   },
   onShow () {
-    this.queryUserPublishBook()
-    // Do something when page show.
+    // this.queryUserPublishBook()
+    // this.changeUserId()
   },
   onLoad () {
     // this.queryUserPublishBook()
@@ -65,16 +69,12 @@ export default {
     // this.getSetting()
   },
   computed: {
-    ...mapGetters(['userInfo', 'isLogin'])
+    ...mapGetters(['userInfo', 'isLogin', 'userData'])
   },
   mounted () {
-    this.isLoginFun()
   },
   methods: {
-    ...mapMutations(['changeStatus', 'changeLoginStatus']),
-    isLoginFun () {
-      console.log(this.isLogin)
-    },
+    ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData']),
     getInfo () {
       var url = '/pages/login/main'
       wx.navigateTo({url})
@@ -123,19 +123,16 @@ export default {
           }
         }
       })
-    },
-    queryUserPublishBook () {
-      try {
-        const value = wx.getStorageSync('user_id')
-        this.$fly.get('/books/own', {
-          user_id: value
-        }).then(res => {
-          this.bookLength = res.length
-        })
-      } catch (e) {
-        console.log('Storage not exist!')
-      }
     }
+    // queryUserPublishBook () {
+    //   console.log(this.user_id)
+    //   this.$fly.get('/books/own', {
+    //     user_id: this.user_id
+    //   }).then(res => {
+    //     console.log(res)
+    //     this.bookLength = res.length
+    //   })
+    // }
   }
 }
 </script>
