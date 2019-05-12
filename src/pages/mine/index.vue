@@ -9,9 +9,9 @@
     <div class="selfinfo">
       <van-card 
         v-if="isLogin"
-        :title="userInfo.nickName"
-        desc="该用户暂时没有介绍..."
-        :thumb="userInfo.avatarUrl"
+        :title="userInfos.nick_name"
+        :desc="userInfos.user_sign"
+        :thumb="userInfos.user_pic"
       />
       <van-card 
         v-else
@@ -29,6 +29,8 @@
         <van-cell-group>
           <van-cell title="我发布的" v-if="isLogin" is-link @click="onClickPublish"/>
           <van-cell title="我发布的" v-else is-link/>
+          <van-cell title="我的购物车" v-if="isLogin" is-link @click="onClickGetGoodsCar"/>
+          <van-cell title="我的购物车" v-else is-link/>
           <!-- <van-cell title="我卖出的" value="20条" is-link @click="onClickSell"/>
           <van-cell title="我买到的" value="20条" is-link @click="onClickGet"/>
           <van-cell title="我的心愿书单" value="20条" is-link @click="onClickWish"/> -->
@@ -38,9 +40,14 @@
       <!-- 设置信息 -->
       <div class="settings">
         <van-cell-group>
-          <van-cell title="设置" is-link @click="onClickSettings"/>
-          <van-cell title="帮助与反馈" is-link @click="onClickFaq"/>
-          <van-cell title="退出登录" is-link @click="onClickClean"/>
+          <!-- <van-cell title="设置" is-link @click="onClickSettings"/> -->
+          <van-cell title="设置" v-if="isLogin" is-link @click="onClickSettings"/>
+          <van-cell title="设置" v-else is-link/>
+          <!-- <van-cell title="帮助与反馈" is-link @click="onClickFaq"/> -->
+          <van-cell title="帮助与反馈" v-if="isLogin" is-link @click="onClickFaq"/>
+          <van-cell title="帮助与反馈" v-else is-link/>
+          <van-cell title="退出登录" v-if="isLogin" is-link @click="onClickClean"/>
+          <van-cell title="退出登录" v-else is-link/>
         </van-cell-group>
       </div>
     </div>
@@ -59,22 +66,18 @@ export default {
     }
   },
   onShow () {
-    // this.queryUserPublishBook()
-    // this.changeUserId()
   },
   onLoad () {
-    // this.queryUserPublishBook()
   },
   create () {
-    // this.getSetting()
   },
   computed: {
-    ...mapGetters(['userInfo', 'isLogin', 'userData'])
+    ...mapGetters(['userInfo', 'isLogin', 'userData', 'userInfos'])
   },
   mounted () {
   },
   methods: {
-    ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData']),
+    ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData', 'changeUserInfo']),
     getInfo () {
       var url = '/pages/login/main'
       wx.navigateTo({url})
@@ -82,6 +85,11 @@ export default {
     onClickPublish () {
       wx.navigateTo({
         url: '/pages/user-publish/main'
+      })
+    },
+    onClickGetGoodsCar () {
+      wx.navigateTo({
+        url: '/pages/goods-car/main'
       })
     },
     onClickSell () {
@@ -111,28 +119,26 @@ export default {
     },
     // 清除登陆状态
     onClickClean () {
+      this.user_id = store.state.user.userData
       let that = this
       wx.showModal({
         title: '提示',
         content: '是否退出登陆？',
         success (res) {
           if (res.confirm) {
-            that.changeLoginStatus(false)
+            that.$fly.post('/user/logout', {
+              user_id: that.user_id
+            })
+            that.changeLoginStatus(false) // 设置用户登陆登陆状态为false
+            that.changeUserData('') // 设置用户的userId为空
+            that.changeStatus('')
+            that.changeUserInfo('') // 退出则将所有用户信息清空
           } else if (res.cancel) {
             console.log('用户点击取消')
           }
         }
       })
     }
-    // queryUserPublishBook () {
-    //   console.log(this.user_id)
-    //   this.$fly.get('/books/own', {
-    //     user_id: this.user_id
-    //   }).then(res => {
-    //     console.log(res)
-    //     this.bookLength = res.length
-    //   })
-    // }
   }
 }
 </script>

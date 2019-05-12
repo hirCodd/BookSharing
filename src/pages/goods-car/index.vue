@@ -59,22 +59,23 @@ export default {
     ...mapGetters(['userInfo', 'isLogin', 'userData'])
   },
   onLoad () {
-    this.queryUserPublishBook()
+    this.queryUserGoodsCar()
   },
   mouted () {
     // this.queryUserPublishBook()
   },
   methods: {
     // 改变用户登陆状态
-    ...mapGetters(['userInfo', 'isLogin', 'userData']),
     ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData']),
-    queryUserPublishBook () {
+    queryUserGoodsCar () {
       this.userId = store.state.user.userData
-      this.$fly.get('/books/own', {
+      this.$fly.get('/order/getgoodscar', {
         user_id: this.userId
       }).then(res => {
+        console.log(res)
         this.temp = res
         this.list = res
+        console.log(this.list.length)
         for (let i = 0; i < this.temp.length; i++) {
           this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
         }

@@ -2,6 +2,8 @@
   "navigationBarTitleText": "用户设置",
   "usingComponents": {
     "van-cell": "../../static/vant/cell/index",
-    "van-cell-group": "../../static/vant/cell-group/index"
+    "van-cell-group": "../../static/vant/cell-group/index",
+    "van-dialog": "../../static/vant/dialog/index",
+    "van-field": "../../static/vant/field/index"
   }
 }

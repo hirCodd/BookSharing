@@ -3,7 +3,7 @@
  * @Author: your name
  * @LastEditors: Please set LastEditors
  * @Date: 2019-03-12 23:42:41
- * @LastEditTime: 2019-05-11 16:21:10
+ * @LastEditTime: 2019-05-12 13:41:18
  -->
 <template>
   <div class="container">
@@ -139,7 +139,6 @@ export default {
      */
     changeUserId () {
       this.bookInfo.user_id = store.state.user.userData
-      console.log(this.bookInfo.user_id)
     },
     changeUserName (e) {
       this.bookInfo.userName = e.mp.detail

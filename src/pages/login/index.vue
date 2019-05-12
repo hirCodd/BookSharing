@@ -27,14 +27,14 @@ export default {
   onLaunch () {
   },
   computed: {
-    ...mapGetters(['userInfo', 'isLogin', 'userData'])
+    ...mapGetters(['userInfo', 'isLogin', 'userData', 'userInfos'])
   },
   mounted () {
     // this.getUserLogin()
   },
   methods: {
     // 改变用户登陆状态
-    ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData']),
+    ...mapMutations(['changeStatus', 'changeLoginStatus', 'changeUserData', 'changeUserInfo']),
     bindGetUserInfo (e) {
       const that = this
       let { encryptedData, userInfo, iv } = e.mp.detail
@@ -59,9 +59,11 @@ export default {
                   that.$fly.post('/user/login', {
                     user_id: res.user_data[0].user_id
                   }).then(
+                    // 登录后直接获取用户信息
                     that.changeLoginStatus(true),
                     that.changeStatus(userInfo),
                     that.changeUserData(res.user_data[0].user_id),
+                    that.changeUserInfo(res.user_data[0]),
                     wx.navigateBack({
                       delta: 1
                     })
@@ -81,7 +83,15 @@ export default {
                       // 登陆之后都要将保存在vuex的数据保存
                       that.changeLoginStatus(true),
                       that.changeStatus(userInfo),
-                      that.changeUserData(res.user_id), // 仅保存当前用户数据
+                      that.changeUserData(res.user_id), // 仅保存当前用户数据user_id
+                      that.$fly.get('/user/getone', {
+                        user_id: res.user_id
+                      }).then(res => {
+                        if (res.user_data[0] != null) {
+                          // this.userInfos = res.user_data[0]
+                          that.changeUserInfo(res.user_data[0])
+                        }
+                      }),
                       wx.navigateBack({
                         delta: 1
                       })

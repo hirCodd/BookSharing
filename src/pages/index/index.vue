@@ -10,20 +10,19 @@
         @search="onSearch"
         @change="changeValue"
         @clear="getData"
-        @blur="getData"
         >
         <view slot="action" @search="onSearch" @click="onSearch">搜索</view>
       </van-search>
     </div>
     <!-- 列表 -->
     <div class="list-content">
-      <van-panel 
+      <van-panel
         use-footer-slot   
         custom-class="book-info" 
         header-class="book-info-header" 
         footer-class="book-info-footer"
         v-for="(item, index) in list"
-        :key="item.index">
+        :key="item.id">
         <view slot="header">
           <van-card
             custom-class="card-info"
@@ -36,7 +35,12 @@
             :desc="item.book_desc"
             :title="item.book_name"
             :thumb="item.book_img_url"
+            link-type="navigateTo"
+            centered="true"
+            :data-postid="item.id"
+            @click="openUrl"
           >
+          <!-- <van-button type="default" @click="openUrl">默认按钮</van-button> -->
           </van-card>
         </view>
         <hr>
@@ -103,6 +107,16 @@ export default {
     changeWish () {
       this.wish_num++
     },
+    openUrl (event) {
+      // let postId = event.currentTarget.dataset.id
+      // console.log('sss')
+      // console.log(id)
+      // console.log(postId)
+      // console.log(event.mp.currentTarget.dataset.postid)
+      wx.navigateTo({
+        url: '/pages/page-detail/main?postid=' + event.mp.currentTarget.dataset.postid
+      })
+    },
     // 获取所有数据
     getData () {
       const that = this
@@ -116,9 +130,6 @@ export default {
         }
       })
     }
-  },
-  test () {
-    console.log(this.keyword)
   }
   // filters: {
   //   ellipsis (value) {
