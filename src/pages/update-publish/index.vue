@@ -9,35 +9,41 @@
           label="联系人姓名"
           name="userName"
           placeholder="请输入联系人姓名"
+          :value="bookInformation.real_name"
           @change="changeUserName"
         />
         <van-field
           label="电话号码"
           name="phone"
+          :value="bookInformation.user_phone"
           placeholder="请输入电话号码"
           @change="changePhone"
         />
         <van-field
           label="联系人省份"
           name="province"
+          :value="bookInformation.user_province"
           placeholder="请输入联系人地址"
           @change="changeProvince"
         />
         <van-field
           label="联系人城市"
           name="city"
+          :value="bookInformation.user_city"
           placeholder="请输入联系人地址"
           @change="changeCity"
         />
         <van-field
           label="联系人区县"
           name="region"
+          :value="bookInformation.user_region"
           placeholder="请输入联系人地址"
           @change="changeRegion"
         />
         <van-field
           label="联系人地址"
           name="address"
+          :value="bookInformation.user_address"
           placeholder="请输入联系人地址"
           @change="changeAddress"
         />
@@ -48,18 +54,21 @@
         <van-field
           label="书籍名称"
           name="bookName"
+          :value="bookInformation.book_name"
           placeholder="请输入书籍名称"
           @change="changeBookName"
         />
         <van-field
           label="书本价格"
           name="bookPrice"
+          :value="bookInformation.book_price"
           placeholder="请输入书本价格"
           @change="changeBookPrice"
         />
          <van-field
           label="书籍本数"
           name="bookNum"
+          :value="bookInformation.book_number"
           placeholder="请输入书籍本数"
           @change="changeBookNum"
         />
@@ -68,6 +77,7 @@
           label="书籍描述"
           name="bookDesc"
           type="textarea"
+          :value="bookInformation.book_desc"
           placeholder="请输入书籍描述"
           @change="changeBookDesc"
         />
@@ -116,12 +126,16 @@ export default {
         bookNum: ''
       },
       files: [],
-      filesOnline: []
+      filesOnline: [],
+      bookInformation: [],
+      images: []
     }
   },
-  onLoad () {
-    this.files = []
-    this.filesOnline = [] // 用户上传完成后置空
+  onLoad (option) {
+    console.log(option.postid)
+    this.getOneBookInfo(option.postid)
+    // this.files = []
+    // this.filesOnline = [] // 用户上传完成后置空
     this.initValidate()
     this.changeUserId()
   },
@@ -168,6 +182,22 @@ export default {
     /**
      * @description: 通过表单验证的数据才能够想后端发送，而不能通过的数据提示用户输入正确的数据，直到用户输入正确
      */
+    getOneBookInfo (option) {
+      this.$fly.get('/books/getone', {
+        id: option
+      }).then(res => {
+        this.bookInformation = res[0]
+        console.log(this.bookInformation)
+        this.files = res[0].book_img_url.split(',')
+        for (let index = 0; index < this.images.length; index++) {
+          // 将图片进行压缩
+          wx.compressImage({
+            src: this.files[index], // 图片路径
+            quality: 80 // 压缩质量
+          })
+        }
+      })
+    },
     submitBookInfo () {
       const that = this
       const params = this.bookInfo
@@ -239,10 +269,24 @@ export default {
             // 将存储图片的数据转化为字符串传入后端
             that.bookInfo.images = that.filesOnline.join(',')
             // 只有全部数据都存在才上传到后端(此处由于微信小程序的bug不能直接上传，所以需要进行判断数据)
-            if (that.files.length === that.filesOnline.length) {
-              that.$fly.post('/books/many', {
-                data: that.bookInfo
-              })
+            // 首先验证用户是否修改数据，再判读用户是否更改图片
+            if ((that.bookInfo.userName != '' && that.bookInfo.userName != that.bookInformation.user_name) //eslint-disable-line
+              && (that.bookInfo.phone != '' && that.bookInfo.phone != that.bookInformation.user_phone) //eslint-disable-line
+              && (that.bookInfo.province != '' && that.bookInfo.province != that.bookInformation.user_province) //eslint-disable-line
+              && (that.bookInfo.city != '' && that.bookInfo.city != that.bookInformation.user_citry) //eslint-disable-line
+              && (that.bookInfo.region != '' && that.bookInfo.region != that.bookInformation.user_region) //eslint-disable-line
+              && (that.bookInfo.address != '' && that.bookInfo.address != that.bookInformation.user_address) //eslint-disable-line
+              && (that.bookInfo.bookName != '' && that.bookInfo.bookName != that.bookInformation.book_name) //eslint-disable-line
+              && (that.bookInfo.bookPrice != '' && that.bookInfo.bookPrice != that.bookInformation.book_price) //eslint-disable-line
+              && (that.bookInfo.bookDesc != '' && that.bookInfo.bookDesc != that.bookInformation.book_desc) //eslint-disable-line
+              && (that.bookInfo.bookNum != '' && that.bookInfo.bookNum != tha.bookInformation.book_number) //eslint-disable-line
+              && that.files.length === that.filesOnline.length) { //eslint-disable-line
+              console.log(that.bookInfo)
+              // that.$fly.post('/books/many', {
+              //   data: that.bookInfo
+              // })
+            } else {
+              console.log('error')
             }
           },
           fail: function () {

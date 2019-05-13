@@ -63,18 +63,20 @@ export default {
     },
     confirmChangeFeedback () {
       this.user_id = store.state.user.userData
-      this.$fly.post('/user/feedback', {
-        user_id: this.user_id,
-        content: this.userFeedback
-      }).then(res => {
-        if (res.status == 200) { //eslint-disable-line
-          wx.showToast({
-            title: '反馈成功',
-            icon: 'success',
-            duration: 2000
-          })
-        }
-      })
+      if (this.userFeedback != '') { //eslint-disable-line
+        this.$fly.post('/user/feedback', {
+          user_id: this.user_id,
+          content: this.userFeedback
+        }).then(res => {
+          if (res.status == 200) { //eslint-disable-line
+            wx.showToast({
+              title: '反馈成功',
+              icon: 'success',
+              duration: 2000
+            })
+          }
+        })
+      }
     },
     onCloseFeedback () {
       this.showFeedback = false

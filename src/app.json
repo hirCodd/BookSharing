@@ -4,6 +4,7 @@
     "pages/mine/main",
     "pages/publish/main",
     "pages/goods-car/main",
+    "pages/update-publish/main",
     "pages/single-type/main",
     "pages/many-type/main",
     "pages/user-publish/main",

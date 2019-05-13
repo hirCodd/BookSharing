@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="publish-type">
-      <div class="single-book">
+      <!-- <div class="single-book">
         <van-button
           v-if="isLogin"
           round
@@ -18,21 +18,23 @@
           @click="showLogin"
           >发布单本书
         </van-button>
-      </div>
+      </div> -->
       <div class="many-book">
         <van-button
           v-if="isLogin"
           round 
+      
           type="default"
           @click="onClickMany"
-          >发布多本书
+          >发布书籍
         </van-button>
         <van-button
           v-else
           round 
+          
           type="default"
           @click="showLogin"
-          >发布多本书
+          >发布书籍
         </van-button>
       </div>
     </div>

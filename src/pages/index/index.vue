@@ -43,7 +43,6 @@
           <!-- <van-button type="default" @click="openUrl">默认按钮</van-button> -->
           </van-card>
         </view>
-        <hr>
          <view slot="footer">
           <van-row>
           <van-col span="12"
@@ -108,11 +107,6 @@ export default {
       this.wish_num++
     },
     openUrl (event) {
-      // let postId = event.currentTarget.dataset.id
-      // console.log('sss')
-      // console.log(id)
-      // console.log(postId)
-      // console.log(event.mp.currentTarget.dataset.postid)
       wx.navigateTo({
         url: '/pages/page-detail/main?postid=' + event.mp.currentTarget.dataset.postid
       })
@@ -131,15 +125,6 @@ export default {
       })
     }
   }
-  // filters: {
-  //   ellipsis (value) {
-  //     if (!value) return ''
-  //     if (value.length > 8) {
-  //       return value.slice(0, 8) + '...'
-  //     }
-  //     return value
-  //   }
-  // }
 }
 </script>
 
