@@ -40,25 +40,12 @@
             :data-postid="item.id"
             @click="openUrl"
           >
-          <!-- <van-button type="default" @click="openUrl">默认按钮</van-button> -->
           </van-card>
         </view>
-         <view slot="footer">
-          <van-row>
-          <van-col span="12"
-          @click="changeWish">
-            <van-icon name="like-o" />
-            加入心愿书单
-          </van-col>
-          <van-col span="12">
-            {{wish_num}}人想要
-          </van-col>
-        </van-row>
+        <view slot="footer" >
+          <van-button size="large" :data-postid="item.id" @click="openUrl">查看详情</van-button>
         </view>
       </van-panel>
-      <!-- <div class="show" v-for="item in list">
-        {{item}}
-      </div> -->
     </div>
   </div>
 </template>
@@ -93,15 +80,17 @@ export default {
     },
     // 进行搜索
     onSearch () {
-      this.$fly.get('/books/search', {
-        keyword: this.keyword
-      }).then(res => {
-        this.temp = res
-        this.list = res
-        for (let i = 0; i < this.temp.length; i++) {
-          this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
-        }
-      })
+      if (this.keyword != '') { //eslint-disable-line
+        this.$fly.get('/books/search', {
+          keyword: this.keyword
+        }).then(res => {
+          this.temp = res
+          this.list = res
+          for (let i = 0; i < this.temp.length; i++) {
+            this.list[i].book_img_url = this.temp[i].book_img_url.split(',')[0]
+          }
+        })
+      }
     },
     changeWish () {
       this.wish_num++

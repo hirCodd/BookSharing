@@ -125,7 +125,6 @@ export default {
       for (let i = 0; i < this.list.length; i++) {
         if (id == this.list[i].id) { //eslint-disable-line
           this.list[i].is_publish = 'True'
-          console.log(this.list[i].is_publish)
         }
       }
       this.$fly.post('/books/updatestatus', {

@@ -42,7 +42,6 @@ export default {
         success (res) {
           if (res.code) {
             // 获取用户登陆信息
-            console.log('微信用户登陆成功')
             // 将获取到code传给后端
             that.code = res.code
             that.$fly.post('/get/params', {
@@ -64,6 +63,7 @@ export default {
                     that.changeStatus(userInfo),
                     that.changeUserData(res.user_data[0].user_id),
                     that.changeUserInfo(res.user_data[0]),
+                    console.log('微信用户登陆成功'),
                     wx.navigateBack({
                       delta: 1
                     })
