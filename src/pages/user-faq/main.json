@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "首页",
+  "navigationBarTitleText": "帮助与反馈",
   "usingComponents": {
     "van-cell": "../../static/vant/cell/index",
     "van-cell-group": "../../static/vant/cell-group/index",
