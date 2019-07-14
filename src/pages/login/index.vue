@@ -56,13 +56,13 @@ export default {
                 if (res.user_data != null) {
                   // 用户数据不为空，则直接登录
                   that.$fly.post('/user/login', {
-                    user_id: res.user_data[0].user_id
+                    user_id: res.user_data.user_id
                   }).then(
                     // 登录后直接获取用户信息
                     that.changeLoginStatus(true),
                     that.changeStatus(userInfo),
-                    that.changeUserData(res.user_data[0].user_id),
-                    that.changeUserInfo(res.user_data[0]),
+                    that.changeUserData(res.user_data.user_id),
+                    that.changeUserInfo(res.user_data),
                     console.log('微信用户登陆成功'),
                     wx.navigateBack({
                       delta: 1
@@ -87,9 +87,9 @@ export default {
                       that.$fly.get('/user/getone', {
                         user_id: res.user_id
                       }).then(res => {
-                        if (res.user_data[0] != null) {
+                        if (res.user_data != null) {
                           // this.userInfos = res.user_data[0]
-                          that.changeUserInfo(res.user_data[0])
+                          that.changeUserInfo(res.user_data)
                         }
                       }),
                       wx.navigateBack({

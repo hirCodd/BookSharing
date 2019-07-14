@@ -2,7 +2,7 @@
  * @Description: api request
  * @Author: finen
  * @Date: 2019-03-25 00:11:29
- * @LastEditTime: 2019-05-02 14:55:49
+ * @LastEditTime: 2019-07-14 14:23:51
  */
 
 // import Vue from 'vue'
@@ -20,7 +20,7 @@
 import Fly from 'flyio/dist/npm/wx'
 const fly = new Fly()
 // Vue.prototype.$http=fly
-const host = 'http://127.0.0.1:5000/api/v1/'
+const host = 'http://localhost:8081/api/v1/'
 // const host = 'https://weapp.finen.top/api/v1/'
 // const host = 'http://weappx.free.idcfengye.com/api/v1'
 // 添加请求拦截器

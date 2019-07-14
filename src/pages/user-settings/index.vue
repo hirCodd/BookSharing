@@ -56,7 +56,7 @@ export default {
       this.$fly.get('/user/getone', {
         user_id: this.user_id
       }).then(res => {
-        this.value = res.user_data[0].user_sign
+        this.value = res.user_data.user_sign
       })
     },
     confirmChange () {
@@ -72,7 +72,7 @@ export default {
           user_id: this.user_id
         }).then(res => {
           // 更新了用户信心后重新再vuex中重新赋值
-          this.changeUserInfo(res.user_data[0])
+          this.changeUserInfo(res.user_data)
         })
       } else {
         wx.showToast({
